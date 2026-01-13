@@ -26,6 +26,27 @@ async function run() {
 
    
 
+
+
+app.post('/products', async (req, res) => {
+  try {
+    const newProduct = req.body;
+
+    if (!newProduct || Object.keys(newProduct).length === 0) {
+      return res.status(400).send({ message: "No data received" });
+    }
+
+    const result = await productCollection.insertOne(newProduct);
+    
+    console.log("✅ Product Inserted:", result);
+    res.status(201).send(result);
+
+  } catch (error) {
+    console.error("❌ Post Error:", error); 
+    res.status(500).send({ message: "Internal Server Error", error: error.message });
+  }
+});
+
     console.log("✅ Successfully connected to MongoDB!");
   } catch (error) {
     console.error("❌ MongoDB connection error:", error);
